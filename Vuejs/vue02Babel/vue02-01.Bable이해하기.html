@@ -40,6 +40,22 @@
 </html>
 
 <!-- ES5 사용하기 -->
-
+<script>
+    var getMessage = function(params) {
+    var output_es5 = document.getElementById("output_es5");
+    output_es5.innerHTML = "Hellom ES5";
+}
+getMessage();
+</script>
 
 <!-- ES2015 사용하기 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"> //바벨(컴파일러)을 쓰려면 이 라이브러리가 꼭 필요
+    /* 자바스크립트로 컴파일러. ES6-->ES5, JSX-->ES5 */
+</script>
+<script type="text/babel"> //스크립트 내용을 babel로 바꾸겠다.
+    const getMessage = () => { //위에는 펑션 사용 / 화살표함수 사용
+    var output_es5 = document.getElementById("output_es5");
+    output_es6.innerHTML = "Hellom ES6";
+    }
+    getMessage();
+</script>
