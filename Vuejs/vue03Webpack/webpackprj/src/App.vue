@@ -1,28 +1,41 @@
+<style scoped>
+section {
+  height: 150px;
+  background-color: #95db5e;
+  margin: 0 5% 20px 5%;
+  margin: 40px 0px;
+}
+
+div {
+    margin: 40px 20px;
+}
+</style>
+
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <header-comp></header-comp>
+
+    <section id="page1" data-role="page">
+        <div class="content" data-role="content">컨텐츠</div>
+    </section>
+
+    <footer-comp></footer-comp>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from "./HeaderComp.vue";
+import Footer from "./FooterComp.vue";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {
+      msg: "Hello VueJS",
+    };
+  },
+  components: { // 변수명과 태그를 매핑해준다.  -- 소스를 먼저 결합한다.
+    "header-comp": Header, //태그에 header 변수 추가
+    "footer-comp": Footer, // 태그에 footer 변수 추가
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
