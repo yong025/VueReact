@@ -51,7 +51,7 @@
           Child 컴포넌트에서  + 버튼을 클릭하면 add-counter 이벤트 발생
           Child 컴포넌트에서  - 버튼을 클릭하면 sub-counter 이벤트 발생
 
-        child-componet 템플릿 태그는 아래와 같이 설정하시오.
+        componet-child 템플릿 태그는 아래와 같이 설정하시오.
           <div class="component-child">
               Child counter : {{ num }} <br>
               <button name="child" v-on:click="addCounter">+</button>
@@ -89,3 +89,92 @@
 </html>
 
 <!-- vue 플러그인 임포트   -->
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.js">/* vue 플러그인 임포트 */</script>
+<script>
+    const componentChild = {
+        /* pdtmc^2w */
+        props: ['num'] ,
+        data: function() {
+            /* 컴포넌트 안에서 사용되는 변수 등록. 개별 변수 */
+            return {
+            }
+        },
+        template: `
+          <div class="component-child">
+              Child counter : {{ num }} <br>
+              <button name="child" v-on:click="addCounter">+</button>
+              <button name="child" v-on:click="subCounter">-</button>
+          </div>
+        `,
+        methods: {
+            /* 이벤트 핸들러 등록 + 일반 함수 */
+            addCounter(){
+                // 이벤트를 이용하여 부모의 값을 바꾸시오.
+                this.$emit( 'add-counter', +10);
+            },
+            subCounter(){
+                // 이벤트를 이용하여 부모의 값을 바꾸시오.
+                this.$emit( 'sub-counter', -10);
+            },
+        },
+        components: {
+            /* 전역 컴포넌트는 등록하지 않는다. */
+            /* 지역 컴포넌트나 파일 컴포넌트이면 등록해야 한다 . 예시) "태그명" : 컴포넌트명 */
+
+        },
+        computed: {
+            /* 자동처리 + 동기식. 변수명이 메서드 명이다. 메서드로 작성. return 필수. data 와 공존 불가  */
+
+        },
+        watch: {
+            /* 자동처리 + 비동기식. data 에 등록된 프로퍼티(변수) 모니터링. 메서드로 작성. 매개변수 필수. 외부 api 호출을 위해서 사용  */
+
+        },
+        mounted() {
+            console.log("mounted");
+        },
+        updated() {
+            console.log("updated");
+        },
+    };
+
+
+    new Vue({
+        /* edtmc^2w */
+        el: '#app',
+        data: {
+            /* 인스턴스 안에서 사용되는 변수 등록, 공유 변수 */
+            counter: 0,
+        },
+        //template: ``,
+        methods: {
+            /* 이벤트 핸들러 등록 + 일반 함수 */
+            addCounter(param){
+                this.$data.counter = this.$data.counter + param;
+            },
+            subCounter(param){
+                this.$data.counter = this.$data.counter + param;
+            },
+        },
+        components: {
+            /* 전역 컴포넌트는 등록하지 않는다. */
+            /* 지역 컴포넌트나 파일 컴포넌트이면 등록해야 한다 . 예시) "태그명" : 컴포넌트명 */
+            'component-child': componentChild,
+        },
+        computed: {
+            /* 자동처리 + 동기식. 변수명이 메서드 명이다. 메서드로 작성. return 필수.  data 와 공존 불가 */
+
+        },
+        watch: {
+            /* 자동처리 + 비동기식. data 에 등록된 프로퍼티(변수) 모니터링. 메서드로 작성. 매개변수 필수. 외부 api 호출을 위해서 사용 */
+
+        },
+        mounted() {
+            console.log("mounted");
+        },
+        updated() {
+            console.log("updated");
+        },
+    });
+
+</script>

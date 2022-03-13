@@ -38,3 +38,59 @@
 </html>
 
 <!-- vue 플러그인 임포트   -->
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.js">/* vue 플러그인 임포트 */</script>
+<script>
+    // 인스턴스만들기 ==> vuei
+    new Vue({
+        /* edtmc^2w */
+        el: "#my",
+        data: {
+            /* message = "change message at mounted!!!" ; */
+            message : "change message at mounted!!!" ,
+        },
+        //template: ``,
+        methods: {
+            /* var doClick = function(event){ }; */
+            doClick (event){
+                console.log(event.target);
+
+                //this.$data.message = "change message when a button clicked!!!" ;
+                var time = new Date().toLocaleString()
+                this.$set( this.$data, "message", "change message when a button clicked!!!" + time);
+            },
+        },
+        components: {
+            /* 컴포넌트 등록. 예시) "태그명" : 컴포넌트명 */
+
+        },
+        computed: {
+
+        },
+        watch: {
+
+        },
+        mounted() {
+
+            console.log("mounted");
+
+            window.setTimeout( ()=>{
+                console.log(this);//
+
+                //this.$data.message = "change message after 3 seconds!!!";
+                this.$set( this.$data, "message", "change message after 3 seconds!!!");
+            }, 3000); // 3000ms = 3s
+
+            var self = this;
+            window.setTimeout( function () {
+                console.log(self);//
+
+                //this.$data.message = "change message after 5 seconds!!!";
+                self.$set( self.$data, "message", "change message after 5 seconds!!!");
+            }, 5000); // 5000ms = 5s
+        },
+        updated() {
+            console.log("updated");
+        },
+    });
+
+</script>

@@ -58,3 +58,40 @@
 </html>
 
 <!-- vue 플러그인 임포트   -->
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.js">/* vue 플러그인 임포트 */</script>
+<script>
+    const componentBox = {
+        /* pdtmc^2w */
+        props: ['num'] ,
+        template: `
+        <span style="display:inline-block; font-size:3em; border:1px dashed blue; padding:10px 20px; margin:5px; text-align:center;">
+            {{num}}
+        </span>
+        `,
+    };
+
+
+    new Vue({
+        /* edtmc^2w */
+        el: '#app',
+        data: {
+            /* 인스턴스 안에서 사용되는 변수 등록, 공유 변수 */
+            arr: [0,1,2,3,4,5],
+        },
+        //template: ``,
+        methods: {
+            /* 이벤트 핸들러 등록 + 일반 함수 */
+            clickAddBox(){
+                //this.$data.arr.push( this.$data.arr.length );
+                // this.$data.arr[this.$data.arr.length] = this.$data.arr.length;
+                this.$set( this.$data.arr, this.$data.arr.length, this.$data.arr.length);
+            },
+        },
+        components: {
+            /* 전역 컴포넌트는 등록하지 않는다. */
+            /* 지역 컴포넌트나 파일 컴포넌트이면 등록해야 한다 . 예시) "태그명" : 컴포넌트명 */
+            'component-box':  componentBox,
+        },
+    });
+
+</script>
