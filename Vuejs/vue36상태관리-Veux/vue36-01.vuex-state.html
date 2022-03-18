@@ -132,92 +132,61 @@
 <!-- vue 플러그인 임포트   -->
 <script src="https://unpkg.com/vue@2.6.14/dist/vue.js">/* vue 플러그인 임포트 */</script>
 <script src="https://unpkg.com/vuex@3.3.0/dist/vuex.js"> /* vuex 플러그인 임포트 */</script>
-<script src="https://unpkg.com/vue-router@3.1.6/dist/vue-router.js"> /* vue 라우터 플러그인 임포트 */</script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"> /* axios 플러그인 임포트 */</script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> /* jQuery 플러그인 임포트 */</script>
 <script>
-    // Vuex 인스턴스 만들기
-    const store = new Vuex.Store({
-        actions: {
-            /* 왜 actions를 사용하나? 비동기로 외부 함수 호출하기 위해서
-             * actions 에는 메서드만 등록 가능하다.
-             * 첫번째인자: 무조건 mutations로 고정.
-             * 두번째인자: 값. store.dispatch()호출시 넘겨지는 값.
-             */
-            set: function( mutations/* 고정 */, param ){
-                mutations.commit("set", param );
+    var store = new Vuex.Store({ // vuex이용해 stroe만들기
+        actions: { //methods와 이름 동일하게 생성 - mutations내부에 메서드 실행하겠다.(mutations와 actions 동일하게 생성하면 됨)
+            increment (mutations, param) { //첫번째 인자는 무조건 바로 아래mutations 고정. 두번째 인자는 param
+                //mutations에 있는 인자를 호출하시오.
+                mutations.commit("increment", param); //this안써도 됨. this를 안쓰기 위해 state를 인자로 받음
             },
-            increment: function( mutations/* 고정 */, param ){
-                mutations.commit("increment", param );
-            },
-            decrement: function( mutations/* 고정 */, param ){
-                mutations.commit("decrement", param );
-            },
-
-        },
-        mutations: {
-            /* 왜 mutations 를 사용하나? state 를 바꾸기 위해서
-             * mutations 에는 메서드만 등록 가능하다.
-             * 첫번째인자: 무조건 state 로 고정.
-             * 두번째인자: 값. mutations.commit() 호출시 넘겨지는 값.
-             * */
-            set: function(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
-                state.인자 = param;
-            },
-            increment: function(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
-                state.counter = state.counter + param;
-            },
-            decrement: function(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
-                state.counter = state.counter + param;
+            decrement (mutations, param) { //첫번째 인자는 무조건 바로 아래mutations 고정. 두번째 인자는 param
+                mutations.commit("decrement", param);
             },
         },
-        state: {
-            /* vue인스턴스나 컴포넌트의 data 프로퍼티에 해당 */
-            인자: "STORE STATE",
-            welcome : "HELLO WORLD VUEX",
-            counter: 10
-        },
-        getters: {
-            /* state 변경 정보를 컴포넌트에 전달하는 역활.
-             * 메서드로 만들어야 하며 메서드명은 state 의 이름을 그대로 사용
-             * 첫번째인자: 무조건 state
-             * 컴포넌트에서는 computed를 사용하여 store의 state 변경 정보를 자동으로 가져오게 된다.
-             * 예시) message()=> store.getters.인자;
-             */
-            인자: function(state/* 고정 */){
-                return state.인자;
+        mutations: { //methods와 이름 동일하게 생성 - state 변환
+            increment (state, param) { //첫번째 인자는 무조건 바로 아래state 고정. 두번째 인자는 param
+                state.counter = state.counter + param;//this안써도 됨. this를 안쓰기 위해 state를 인자로 받음
             },
-            welcome: function(state/* 고정 */){
+            decrement (state, param) { //첫번째 인자는 무조건 바로 아래state 고정. 두번째 인자는 param
+                state.counter = state.counter + param; //param이 methods에서 음수(-1)로 오기 때문에 +사용
+            },
+        },
+        state: { //기존 data에서 쓰던 변수들을 이제 state에서 쓰겠다 ~
+            welcome: "HELLO WORLD",
+            counter: 0,
+        },
+        getters: { //state와 동일하게 만들지만 함수로 만든다.
+            welcome (state) {
                 return state.welcome;
             },
-            counter: function(state/* 고정 */){
+            counter (state) {
                 return state.counter;
-            },
-        },
+            }
+        }
     });
-
 
     new Vue({
         /* edtmc^2w */
         el: '#app',
         data: {
             /* 인스턴스 안에서 사용되는 변수 등록, 공유 변수 */
-            header :"Vuex 사용 앱",
-        //   welcome : "HELLO WORLD",
-        //   counter: 0
+            header: "Vuex 사용 앱",
+            // welcome: "HELLO WORLD",
+            // counter: 0,
         },
         //template: ``,
         methods: {
             /* 이벤트 핸들러 등록 + 일반 함수 */
-            increment() {
-                // counter = counter +1;
-                // this.$data.counter = this.$data.counter + 1;
-                store.dispatch('increment', +1) ;
+            increment () {
+                // this.$data.count = this.$data.count +1;
+                this.$set(this.$data, "counter", this.$data.counter +1)
+
+                store.dispatch("increment", +1); //actions에 넘길 값 설정(inctrment에 +1(param) 넘기겠다.)
             },
-            decrement() {
-                // counter = counter -1;
-                // this.$data.counter = this.$data.counter - 1;
-                store.dispatch('decrement', -1) ;
+            decrement () {
+                this.$set(this.$data, "counter", this.$data.counter -1)
+
+                store.dispatch("decrement", -1);
             }
         },
         components: {
@@ -227,11 +196,10 @@
         },
         computed: {
             /* 자동처리 + 동기식. 변수명이 메서드 명이다. 메서드로 작성. return 필수.  data 와 공존 불가 */
-            welcome() {
-
-                return store.getters.welcom; //vuex이름이 store이고 gtters는 store의 getters , welecome는 getters의 welcome
+            welcome () {
+                return store.getters.welcome;
             },
-            counter(){
+            counter () {
                 return store.getters.counter;
             }
         },

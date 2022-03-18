@@ -42,7 +42,7 @@
     <hr>
 
     <h2>v-bind 연습 1</h2>
-    <div id="app">
+    <div id="app1">
         <pre><b>클릭하면 id 속성 값으로 <i>1234</i> 가 설정되게 만드시오</b></pre>
         <p v-bind:id="idA">
             <button v-on:click="clickBindId">클릭</button>
@@ -69,11 +69,8 @@
             <img v-bind:src="imagePath" />
         </p>
     </div>
-
-
-
+    <hr>
 </body>
-
 </html>
 
 <!-- vue 플러그인 임포트   -->
@@ -81,36 +78,41 @@
 <script>
     new Vue({
         /* edtmc^2w */
-        el: '#app',
+        el: '#app1',
         data: {
             /* 인스턴스 안에서 사용되는 변수 등록, 공유 변수 */
+            //v-bind는 변수로 , v-on은   method로 정의
             idA: null,
             classA: null,
             styleA: null,
             message: null,
             imagePath: null,
         },
-        //template: ``,
+        // template: `#template1`,
         methods: {
             /* 이벤트 핸들러 등록 + 일반 함수 */
-            clickBindId(){
-                this.$data.idA = '1234';
+            clickBindId (event) {
+                //this.$data.idA = "클릭후 id값"
+                this.$data.idA = this.$data.idA +1;
+                this.$set(this.$data, "idA", "클릭후 id값")
             },
-            clickBindClass(){
-                this.$data.classA = 'container';
+            clickBindClass (event) {
+                this.$set(this.$data, "classA", "container");
             },
-            clickBindStyle(){
-                this.$data.styleA = {
-                    color: 'blue',
-                    fontSize: '20pt',
-                };
+            clickBindStyle () {
+                // this.$data.styleA = "color: blue; font-size: 20pt"
+                // 방법 1.
+                this.$set(this.$data, "styleA" , {color: "red", fontWeight: "bold", fontSize: "20pt"})
+                //방법 2.
+                // this.$set(this.$data, "styleA" , "color: red; font-weight: bold; font-size: 20pt;")
             },
-            clickBindValue(){
-                this.$data.message = 'v-bind 지시자';
+            clickBindValue () {
+                // this.$data.message = "v-bind 지시자"
+                this.$set(this.$data, "message", "v-bind 지시자");
             },
-            clickBindSrc(){
-                this.$data.imagePath = '../images/heart.png';
-            },
+            clickBindSrc () {
+                this.$set(this.$data, "imagePath", "../images/heart.png");
+            }
         },
         components: {
             /* 전역 컴포넌트는 등록하지 않는다. */
