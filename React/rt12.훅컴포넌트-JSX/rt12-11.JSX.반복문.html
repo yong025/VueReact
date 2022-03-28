@@ -23,6 +23,8 @@
                   <Loop2 items={elements}></Loop2>
         wrap3 ==> Loop3. map 사용 예제.
                   <Loop3 items={elements}></Loop3>
+        wrap4 ==> Loop4. map 사용 예제.
+                  <Loop4 items={elements}></Loop4>
 
         작성  순서
             단계1: React 객체 스크립트 플러그인 추가 or 객체 import
@@ -39,6 +41,71 @@
 
 </html>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js">
+    /* 자바스크립트로 컴파일러. ES6-->ES5, JSX-->ES5 */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.12.0/umd/react.development.js">
+    /* import React, { Component, PureComponent } from 'react' */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.7.2/prop-types.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js">
+    /* import ReactDOM from 'react-dom' */
+</script>
+<script type="text/babel">
+
+    const { useState, useEffect, useRef, useCallback, useMemo, Fragment } = React;
+
+    function Loop3(props) {
+
+        // redux store 와 연동되는 경우에만 useDispatch(), useSelector() 사용
+        // const dispatch = useDispatch();
+        // const { error, isLoading, notis } = useSelector( state => state.notis );
+
+        // 컴포넌트의 상태값 설정
+        const [state, setState] = useState(['one', 'two', 'three']); // 상태값이 참조타입 경우
+
+        // JSX로 화면 만들기
+        const lis = state.map( (value)=> (<li>{value}</li>) );
+        return (
+            <div>
+                <ul>
+                    {lis}
+                </ul>
+            </div>
+        )
+    }
+
+    // Loop3 을 wrap3 에 붙이기
+    ReactDOM.render(
+        <Loop3></Loop3>
+        ,
+        document.getElementById('wrap3')
+    );
+
+    // Loop4 을 wrap4 에 붙이기
+
+    function Loop4(props) {
+
+        // 컴포넌트의 상태값 설정
+        const [state, setState] = useState(['one', 'two', 'three']); // 상태값이 참조타입 경우
+
+        // JSX로 화면 만들기
+        return (
+            <div>
+                <ul>
+                    {state && state.map( (value)=> (<li>{value}</li>) )}
+                </ul>
+            </div>
+        )
+    }
+    ReactDOM.render(
+        <Loop4></Loop4>
+        ,
+        document.getElementById('wrap4')
+    );
+</script>
 
 
 

@@ -55,7 +55,7 @@
           {{welcome}} 에는 "HELLO WORLD" 가 나오게
           {{counter}} 에는 0 이 나오게
 
-      작업2. vue 인스턴스에 버튼 기능 완성.<== 각자
+      작업2. vue 인스턴스에 버튼 기능 완성. <== 각자
           <button v-on:click="increment">더해줘</button>
           <button v-on:click="decrement">빼줘</button>
 
@@ -110,7 +110,7 @@
                 this.$data.callapi ==== false 이면 store.dispatch( "increment", 1); 호출
             8-4. 인스턴스 methods의 decrement 에 기능 추가.
                 this.$data.callapi ==== true  이면 store.dispatch("setcount", -3) 호출
-                this.$data.callapi ==== false 이면 store.dispatch( "decrement", 1); 호출
+                this.$data.callapi ==== false 이면 store.dispatch( "decrement", -1); 호출
     </xmp>
     <hr>
     <div id="app">
@@ -128,66 +128,146 @@
 </html>
 
 <!-- vue 플러그인 임포트   -->
-
-<!-- vue 플러그인 임포트   -->
 <script src="https://unpkg.com/vue@2.6.14/dist/vue.js">/* vue 플러그인 임포트 */</script>
 <script src="https://unpkg.com/vuex@3.3.0/dist/vuex.js"> /* vuex 플러그인 임포트 */</script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"> /* axios 플러그인 임포트 */</script>
 <script>
-    var store = new Vuex.Store({ // vuex이용해 stroe만들기
-        actions: { //methods와 이름 동일하게 생성 - mutations내부에 메서드 실행하겠다.(mutations와 actions 동일하게 생성하면 됨)
-            increment (mutations, param) { //첫번째 인자는 무조건 바로 아래mutations 고정. 두번째 인자는 param
-                //mutations에 있는 인자를 호출하시오.
-                mutations.commit("increment", param); //this안써도 됨. this를 안쓰기 위해 state를 인자로 받음
+    // Vuex 인스턴스 만들기
+    const store = new Vuex.Store({
+        actions: {
+            /* 왜 actions를 사용하나? 비동기로 외부 함수 호출하기 위해서
+             * actions 에는 메서드만 등록 가능하다.
+             * 첫번째인자: 무조건 mutations로 고정.
+             * 두번째인자: 값. store.dispatch()호출시 넘겨지는 값.
+             */
+            set: function( mutations/* 고정 */, param ){
+                mutations.commit("set", param );
             },
-            decrement (mutations, param) { //첫번째 인자는 무조건 바로 아래mutations 고정. 두번째 인자는 param
-                mutations.commit("decrement", param);
+            increment( mutations/* 고정 */, param ){
+                // mutations.commit("increment", param );
+
+                //http://localhost:5050/counter?step=+1
+                axios({
+                    url: "http://localhost:5050/counter",  // 호출되는 서버 주소.
+                    method: "get",       // request method: get, post, delete, put
+                    params: { step: param },  // 서버로 보내는 데이터. 예시) { data1:"test1", data2:"test2" }
+                    timeout: 30000,    // 최대 대기 시간: 30초. 30초 이상이 되면 fail 부분이 실행됨.
+                    responseType: "json",  // response로 넘어오는 데이터 형태: text, html, xml, json, jsonp, script
+                })
+                .then( (res) => {
+                    console.log(res.data);
+                    // this.$data.message = res.data;
+                    mutations.commit("increment", res.data );
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            },
+            decrement: function( mutations/* 고정 */, param ){
+                axios({
+                    url: "http://localhost:5050/counter",  // 호출되는 서버 주소.
+                    method: "get",       // request method: get, post, delete, put
+                    params: {step: param},  // 서버로 보내는 데이터. 예시) { data1:"test1", data2:"test2" }
+                    timeout: 30000,    // 최대 대기 시간: 30초. 30초 이상이 되면 fail 부분이 실행됨.
+                    responseType: "json",  // response로 넘어오는 데이터 형태: text, html, xml, json, jsonp, script
+                })
+                .then( (res) => {
+                    console.log(res.data);
+                    //this.$data.message = res.data;
+                    mutations.commit("decrement", res.data );
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            },
+            getcount: function( mutations/* 고정 */, param ){
+                // axios를 이용한 외부 rest api 호출
+                axios({
+                    url: "http://localhost:5050/counter",  // 호출되는 서버 주소.
+                    method: "get",       // request method: get, post, delete, put
+                    params: { },  // 서버로 보내는 데이터. 예시) { data1:"test1", data2:"test2" }
+                    timeout: 30000,    // 최대 대기 시간: 30초. 30초 이상이 되면 fail 부분이 실행됨.
+                    responseType: "json",  // response로 넘어오는 데이터 형태: text, html, xml, json, jsonp, script
+                })
+                .then( (res) => {
+                    console.log(res.data);
+                    // this.$data.message = res.data;
+                    mutations.commit("getcount", res.data );
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
             },
         },
-        mutations: { //methods와 이름 동일하게 생성 - state 변환
-            increment (state, param) { //첫번째 인자는 무조건 바로 아래state 고정. 두번째 인자는 param
-                state.counter = state.counter + param;//this안써도 됨. this를 안쓰기 위해 state를 인자로 받음
+        mutations: {
+            /* 왜 mutations 를 사용하나? state 를 바꾸기 위해서
+             * mutations 에는 메서드만 등록 가능하다.
+             * 첫번째인자: 무조건 state 로 고정.
+             * 두번째인자: 값. mutations.commit() 호출시 넘겨지는 값.
+             * */
+            set: function(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
+                state.인자 = param;
             },
-            decrement (state, param) { //첫번째 인자는 무조건 바로 아래state 고정. 두번째 인자는 param
-                state.counter = state.counter + param; //param이 methods에서 음수(-1)로 오기 때문에 +사용
+            increment(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
+                //state.counter = state.counter + param;
+                state.counter = param;
+            },
+            decrement(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
+                // state.counter = state.counter + param;
+                state.counter = param;
+            },
+            getcount(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
+                state.counter = param;
             },
         },
-        state: { //기존 data에서 쓰던 변수들을 이제 state에서 쓰겠다 ~
-            welcome: "HELLO WORLD",
-            counter: 0,
+        state: {
+            /* vue인스턴스나 컴포넌트의 data 프로퍼티에 해당 */
+            인자: "STORE STATE",
+            welcome: 'HELLO WORLD VEUX',
+            counter: 10,
         },
-        getters: { //state와 동일하게 만들지만 함수로 만든다.
-            welcome (state) {
+        getters: {
+            /* state 변경 정보를 컴포넌트에 전달하는 역활.
+             * 메서드로 만들어야 하며 메서드명은 state 의 이름을 그대로 사용
+             * 첫번째인자: 무조건 state
+             * 컴포넌트에서는 computed를 사용하여 store의 state 변경 정보를 자동으로 가져오게 된다.
+             * 예시) message()=> store.getters.인자;
+             */
+            인자: function(state/* 고정 */){
+                return state.인자;
+            },
+            welcome: function(state/* 고정 */){
                 return state.welcome;
             },
-            counter (state) {
+            counter: function(state/* 고정 */){
                 return state.counter;
-            }
-        }
+            },
+        },
     });
 
+    // vue 인스턴스 만들기.
     new Vue({
         /* edtmc^2w */
         el: '#app',
         data: {
             /* 인스턴스 안에서 사용되는 변수 등록, 공유 변수 */
-            header: "Vuex 사용 앱",
-            // welcome: "HELLO WORLD",
-            // counter: 0,
+            header : 'Vuex 사용 앱',
+            //welcome: 'HELLO WORLD',
+            //counter: 0,
         },
         //template: ``,
         methods: {
             /* 이벤트 핸들러 등록 + 일반 함수 */
-            increment () {
-                // this.$data.count = this.$data.count +1;
-                this.$set(this.$data, "counter", this.$data.counter +1)
-
-                store.dispatch("increment", +1); //actions에 넘길 값 설정(inctrment에 +1(param) 넘기겠다.)
+            increment(){
+                // counter = counter + 1;
+                // this.$data.counter = this.$data.counter + 1;
+                store.dispatch('increment', +1);
             },
-            decrement () {
-                this.$set(this.$data, "counter", this.$data.counter -1)
-
-                store.dispatch("decrement", -1);
-            }
+            decrement(){
+                // counter = counter - 1;
+                // this.$data.counter = this.$data.counter - 1;
+                store.dispatch('decrement', -1);
+            },
         },
         components: {
             /* 전역 컴포넌트는 등록하지 않는다. */
@@ -196,12 +276,12 @@
         },
         computed: {
             /* 자동처리 + 동기식. 변수명이 메서드 명이다. 메서드로 작성. return 필수.  data 와 공존 불가 */
-            welcome () {
+            welcome(){
                 return store.getters.welcome;
             },
-            counter () {
+            counter(){
                 return store.getters.counter;
-            }
+            },
         },
         watch: {
             /* 자동처리 + 비동기식. data 에 등록된 프로퍼티(변수) 모니터링. 메서드로 작성. 매개변수 필수. 외부 api 호출을 위해서 사용 */
@@ -209,12 +289,14 @@
         },
         mounted() {
             console.log("mounted");
+
+            // store 에서 counter 값을 가져오는 호출
+            //store.dispatch("액션명", 값);
+            store.dispatch("getcount", null );
         },
         updated() {
-            console.log("updated");
+            console.log("updated", JSON.stringify(this.$data) );
         },
     });
 
 </script>
-
-

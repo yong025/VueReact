@@ -73,7 +73,7 @@
         5.Example 컴포넌트의 JSX
             <div>
                 <p>
-                    <p>You clicked {count} times</p>
+                    <span>You clicked {count} times</span>
                     <button onClick={(event) => alert("count 상태값을 바꾸는 코드를 작성하시오.") }>
                         Click me
                     </button>
@@ -94,6 +94,80 @@
 </html>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js">
+    /* 자바스크립트로 컴파일러. ES6-->ES5, JSX-->ES5 */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.12.0/umd/react.development.js">
+    /* import React, { Component, PureComponent } from 'react' */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.7.2/prop-types.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js">
+    /* import ReactDOM from 'react-dom' */
+</script>
+<script type="text/babel">
+
+const { useState, useEffect, useRef, useCallback, useMemo, Fragment } = React;
+
+function Example(props) {
+
+    // 컴포넌트의 상태값 설정
+    const [age, setAge] = useState(42); // 상태값이 기본타입인 경우
+    const [fruit, setFruit] = useState('banana'); // 상태값이 기본타입인 경우
+    const [todos, setTodos] = useState([{text: 'Learn Hooks'}]);
+
+    const handler = ()=>{
+        // 부모 콜백 메서드 호출.
+        debugger;
+        props.callback();
+    }
+
+    // JSX로 화면 만들기
+    return (
+        <div>
+            <p>
+                <span>You clicked {props.count} times</span>
+                <button onClick={handler}>
+                    Click me
+                </button>
+            </p>
+            <p> age: {age /* age 상태값이 출력되게 하시오. */ }</p>
+            <p> fruit: { fruit/* fruit 상태값이 출력되게 하시오. */ }</p>
+            <p>
+                {
+                    todos && todos.map( (todo,index)=>(<li key={index}>{todo.text}</li>))
+                }
+            </p>
+        </div>
+    )
+}
 
 
-
+function ExampleContainer(props) {
+
+    // 컴포넌트의 상태값 설정
+    const [count, setCount] = useState(0); // 상태값이 기본타입인 경우
+
+    // callback 메서드 작성. callback 메서드는 부모의 공유 상태값을 변경하기 위해서 사용된다.
+    const callback = useCallback( (param)=>{
+        debugger;
+        // state 변경
+        setCount( count + 1);
+    }, [count/* 메서드와 연관되는 상태(변수)명들을 기술 */]);
+
+    // JSX로 화면 만들기
+    return (
+        <div>
+            <Example count={count} callback={callback}></Example>
+        </div>
+    )
+}
+
+// 컴포넌트 화면에 붙이기
+ReactDOM.render(
+    <ExampleContainer></ExampleContainer>
+    ,
+    document.getElementById('app')
+);
+
+</script>

@@ -13,9 +13,22 @@
 
 <body>
     <pre>
+        함수 컴포넌트
+            useState() 훅
+            useEffect() 훅
+            useRef() 훅
+            useContext() 훅
+
+        왜 함수 컴포넌트를 사용하나?
+            ==> 클래스 컴포넌트의 문제점을 해결하기
+            1. 생명주기 메서드에서 코드 스파게티 발생.
+            2. 코드 난독화 오류 발생.
+
         state를 이용하는 상태 관리 방법을 학습한다
         state 는 컴포넌트 내에서 사용되는 변수다.
         state 를 선언하려면 useState() 훅을 사용하여 변경해야 한다.
+
+        컴포넌트는 무엇인가? 수정없이 재사용 가능한 화면 블락
 
         <div>
             <h3>One Way Data Flow of React</h3>
@@ -53,19 +66,24 @@
             const [age, setAge] = useState(42);
             const [fruit, setFruit] = useState('banana');
             const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
-        4.Example 컴포넌트의 JSX
+        4.ExampleContainer 컴포넌트의 JSX
+            <div>
+                <Example count={count}></Example>
+            </div>
+        5.Example 컴포넌트의 JSX
             <div>
                 <p>
-                    <p>You clicked {count} times</p>
-                    <button onClick={(event) => alert("컨테이너의 상태값을 바꾸는 코드를 작성하시오.") }>
+                    <span>You clicked {count} times</span>
+                    <button onClick={(event) => alert("count 상태값을 바꾸는 코드를 작성하시오.") }>
                         Click me
                     </button>
                 </p>
-                { /* age 상태값이 출력되게 하시오. */ }
-                { /* fruit 상태값이 출력되게 하시오. */ }
-                { /* todos 상태값이 출력되게 하시오. */ }
+                <p> age: { /* age 상태값이 출력되게 하시오. */ }</p>
+                <p> fruit: { /* fruit 상태값이 출력되게 하시오. */ }</p>
+                <p> { /* todos 상태값이 출력되게 하시오. */ }</p>
             </div>
-        5. Example 컴포넌트에 age, fruit, todos 상태값이 출력되게 하시오.
+        6. Example 컴포넌트에 age, fruit, todos 상태값이 출력되게 하시오.
+        7. 부모 컴포넌트, ExampleContainer 의 count 상태값을 바꾸는 코드를 작성한다.
     </xmp>
     <hr>
 

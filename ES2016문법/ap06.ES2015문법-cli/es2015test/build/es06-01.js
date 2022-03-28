@@ -6,3 +6,4 @@ console.log('Hello ' + name);
 var getMessage = function getMessage(params) {
     console.log('Hello ' + name);
 };
+getMessage('sejoong');

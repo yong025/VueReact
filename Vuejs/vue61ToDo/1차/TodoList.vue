@@ -45,7 +45,7 @@ li.checked {
     <section>
         <transition-group name="list" tag="ul">
             <li
-                v-for="(todoItem, index) in todoItems"
+                v-for="todoItem in todoItems"
                 v-bind:key="todoItem.id"
                 v-bind:class="checked(todoItem.done)"
                 v-on:click="doneToggle(todoItem.id)"

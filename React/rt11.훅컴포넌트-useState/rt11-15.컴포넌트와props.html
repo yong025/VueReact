@@ -12,7 +12,7 @@
 
 <body>
     <xmp>
-        HelloWorld, HelloWorldContainer 컴포넌트를 만들고
+        HelloWorldContainer, HelloWorld 컴포넌트를 만들고
         props를 사용하여 인자를 넘겨 받는 방법을 복습한다.
 
         작업 1. props를 사용하여 인자를 넘겨 받도록 만든다.
@@ -30,8 +30,8 @@
         작업 2. 여러 개의 root 태그를 두려면 어떻게 하면 될까?
         ==> React.Fragment 사용하면 가능
 
-        작업 3. JSX 반복문을 사용하는 방법을 적용하여 본다. 
-        다음 장에서 학습할 rt12-11.JSX.반복문 를 참조하여 작성하시오
+        작업 3. JSX 반복문을 사용하는 방법을 적용하여 본다.
+        다음 장에서 학습할 rt12-11.JSX.반복문 을 참조하여 작성하시오
 
         HelloWorld JSX
         <div>
@@ -52,5 +52,51 @@
 </html>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js">
+    /* 자바스크립트로 컴파일러. ES6-->ES5, JSX-->ES5 */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.12.0/umd/react.development.js">
+    /* import React, { Component, PureComponent } from 'react' */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.7.2/prop-types.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js">
+    /* import ReactDOM from 'react-dom' */
+</script>
+<script type="text/babel">
 
+    const { useState, useEffect, useRef, useCallback, useMemo, Fragment } = React;
 
+    function HelloContainer(props) {
+        // 컴포넌트의 상태값 설정
+        const [state, setState] = useState([1,2,3,4,5]); // 상태값이 참조타입 경우
+
+        // JSX로 화면 만들기
+        const helloworlds = state && state.map( (value)=>{
+            return (
+                 <Hello index={value}></Hello>
+            );
+        });
+        return (
+            <div>
+                {helloworlds}
+            </div>
+        )
+    }
+
+    function Hello(props) {
+        // JSX로 화면 만들기
+        return (
+            <div>
+                Hello, react world!!! {props.index} - component
+            </div>
+        )
+    }
+
+    // 화면에 컴포넌트 붙이기
+    ReactDOM.render(
+        <HelloContainer></HelloContainer>
+        ,
+        document.getElementById('app')
+    );
+</script>
